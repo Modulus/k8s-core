@@ -9,7 +9,7 @@ spec:
     - ReadWriteMany
   nfs:
     # FIXME: use the right IP
-    server: 192.168.1.38
+    server: 192.168.1.26
     path: "/jenkins"
 ---
 apiVersion: v1

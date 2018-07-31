@@ -20,7 +20,7 @@ Master:
   AdminPassword: "Snus_i_trynet"
   resources:
     requests:
-      cpu: "50m"
+      cpu: "500m"
       memory: "256Mi"
     limits:
       cpu: "1000m"
@@ -45,7 +45,7 @@ Master:
   ServicePort: 8080
   # For minikube, set this to NodePort, elsewhere use LoadBalancer
   # Use ClusterIP if your setup includes ingress controller
-  ServiceType: ClusterIP
+  ServiceType: NodePort
   # Master Service annotations
   ServiceAnnotations: {}
   #   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
@@ -89,8 +89,8 @@ Master:
     - workflow-aggregator:2.5
     - workflow-job:2.15
     - credentials-binding:1.16
-    - git:3.91
-    - blue-ocean:1.7.1
+    - git:3.9.1
+    - blueocean:1.7.1
   # Used to approve a list of groovy functions in pipelines used the script-security plugin. Can be viewed under /scriptApproval
   # ScriptApproval:
   #   - "method groovy.json.JsonSlurperClassic parseText java.lang.String"
@@ -150,7 +150,7 @@ Agent:
   # Allowed types are: ConfigMap, EmptyDir, HostPath, Nfs, Pod, Secret
   # Configure the attributes as they appear in the corresponding Java class for that type
   # https://github.com/jenkinsci/kubernetes-plugin/tree/master/src/main/java/org/csanchez/jenkins/plugins/kubernetes/volumes
-  volumes:
+  #volumes:
   # - type: Secret
   #   secretName: mysecret
   #   mountPath: /var/myapp/mysecret

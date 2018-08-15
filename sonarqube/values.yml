@@ -4,13 +4,13 @@
 replicaCount: 1
 image:
   repository: sonarqube
-  tag: 6.7.5
+  tag: 6.5
   # If using a private repository, the name of the imagePullSecret to use
   # pullSecret: my-repo-secret
 service:
   name: sonarqube
   type: NodePort
-  externalPort: 9000
+  externalPort: 31781
   internalPort: 9000
   annotations:
   # May be used in example for internal load balancing in GCP:
@@ -44,13 +44,13 @@ tolerations: []
 # Ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
-readinessProbe:
-  initialDelaySeconds: 60
-  periodSeconds: 30
-  failureThreshold: 6
-livenessProbe:
-  initialDelaySeconds: 60
-  periodSeconds: 30
+#readinessProbe:
+#  initialDelaySeconds: 120
+#  periodSeconds: 30
+#  failureThreshold: 10
+#livenessProbe:
+#  initialDelaySeconds: 120
+#  periodSeconds: 30
 
 # Set extra env variables. Like proxy settings.
 extraEnv: {}
@@ -67,8 +67,8 @@ resources: {}
 #  cpu: 100m
 #  memory: 128Mi
 persistence:
-  enabled: flase
-  storageClassName: "default"
+  enabled: false
+  storageClassName: ""
   accessMode: ReadWriteOnce
   size: 2Gi
   ## If defined, storageClassName: <storageClass>
@@ -87,8 +87,8 @@ persistence:
 #  install:
 #    - "https://github.com/AmadeusITGroup/sonar-stash/releases/download/1.3.0/sonar-stash-plugin-1.3.0.jar"
 #    - "https://github.com/SonarSource/sonar-ldap/releases/download/2.2-RC3/sonar-ldap-plugin-2.2.0.601.jar"
-#plugins:
- # install: []
+plugins:
+  install: []
   #resources: {}
   # We allow the plugins init container to have a separate resources declaration because
   # the initContainer does not take as much resources.

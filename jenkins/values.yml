@@ -21,7 +21,7 @@ Master:
   resources:
     requests:
       cpu: "500m"
-      memory: "256Mi"
+      memory: "1024Mi"
     limits:
       cpu: "1000m"
       memory: "2048Mi"
@@ -141,10 +141,10 @@ Agent:
   resources:
     requests:
       cpu: "200m"
-      memory: "256Mi"
+      memory: "512Mi"
     limits:
-      cpu: "200m"
-      memory: "256Mi"
+      cpu: "500m"
+      memory: "1024Mi"
   # You may want to change this to true while testing a new image
   AlwaysPullImage: false
   # You can define the volumes that you want to mount for this container

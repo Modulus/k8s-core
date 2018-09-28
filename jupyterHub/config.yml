@@ -1,0 +1,7 @@
+proxy:
+  secretToken: openssl rand -hex 32 # add ""
+hub:
+  db:
+    url: postgres+psycopg2://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>
+    type: postgresql
+  cookieSecret: openssl rand -hex 32 # Add ""

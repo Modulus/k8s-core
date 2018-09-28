@@ -1,0 +1,5 @@
+proxy:
+  secretToken: "f43a5b1c3dad73c8b6667740be7c87e59a65b7ae25149aad6fe22d692cb5ce4d"
+hub:
+  db:
+    type: sqlite-memory

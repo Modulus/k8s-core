@@ -1,0 +1,1 @@
+helm install stable/kubernetes-dashboard --namespace monitoring --name my-release -f values.local.yml

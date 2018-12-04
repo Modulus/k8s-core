@@ -17,6 +17,12 @@ helm template install/kubernetes/helm/istio --name istio --namespace istio-syste
 kubectl label namespace demo istio-injection=enabled
 
 
+
+### ON GCP
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole=cluster-admin \
+  --user="$(gcloud config get-value core/account)"
+
 # Delete
 kubectl delete -f install/kubernetes/helm/istio/templates/crds.yaml -n istio-system
 helm delete istio --purge

@@ -1,0 +1,1 @@
+helm install --name nginx-ingress -f values.yml stable/nginx-ingress

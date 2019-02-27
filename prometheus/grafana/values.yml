@@ -41,7 +41,7 @@ downloadDashboardsImage:
 ## ref: http://kubernetes.io/docs/user-guide/services/
 ##
 service:
-  type: NodePort #ClusterIP
+  type: LoadBalancer #NodePort #ClusterIP
   port: 80
   annotations: {}
   labels: {}
@@ -122,7 +122,7 @@ extraSecretMounts: []
 
 # Pass the plugins you want installed as a comma separated list.
 # plugins: "digrich-bubblechart-panel,grafana-clock-panel"
-plugins: "grafana-kubernetes-app"
+plugins: "grafana-kubernetes-app,grafana-piechart-panel"
 
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
@@ -133,7 +133,7 @@ datasources:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus-server
+      url: http://prom-prometheus-server
       isDefault: true
 #      access: proxy
 
@@ -229,7 +229,7 @@ ldap:
   #   ssl_skip_verify = false
   #   bind_dn = "uid=%s,ou=users,dc=myorg,dc=com"
 
-## Grafana's SMTP configuration
+  ## Grafana's SMTP configuration
 ## NOTE: To enable, grafana.ini must be configured with smtp.enabled
 ## ref: http://docs.grafana.org/installation/configuration/#smtp
 smtp:

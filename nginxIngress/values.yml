@@ -171,7 +171,7 @@ controller:
     loadBalancerSourceRanges: []
 
     enableHttp: true
-    enableHttps: true
+    enableHttps: false
 
     ## Set external traffic policy to: "Local" to preserve source IP on
     ## providers supporting it

@@ -1,0 +1,39 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer
+  namespace: ${NS}
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "replicationcontrollers"]
+  verbs: ["create", "delete", "update", "patch", "watch", "list"]
+- apiGroups: [""]
+  resources: ["secrets", "persistentvolumeclaims", "persistentvolumes"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments", "daemonsets", "statefulsets", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+- apiGroups: ["batch", "extensions"]clu 
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["create", "delete", "deletecollection", "patch", "update", "watch", "list"]
+
+---
+# # This role binding allows "jane" to read pods in the "default" namespace.
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer
+  namespace: ${NS}
+subjects:
+- kind: Group
+  name: tv2:developer # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role #this must be Role or ClusterRole
+  name: developer # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+

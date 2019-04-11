@@ -1,0 +1,40 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ns-admin-role
+  namespace: ${NS}
+rules:
+- apiGroups: [""]
+  resources: ["pods", "configmaps"]
+  verbs: ["create", "delete", "update", "patch", "watch", "list"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["watch", "list"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims", "persistentvolumes"]
+  verbs: ["get", "list"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["daemonsets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+
+
+
+---
+# # This role binding allows "jane" to read pods in the "default" namespace.
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ns-admin-role
+  namespace: ${NS}
+subjects:
+- kind: ServiceAccount
+  name: ns-admin # Name is case sensitive
+  namespace: ${NS}
+roleRef:
+  kind: Role #this must be Role or ClusterRole
+  name: ns-admin-role # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io

@@ -86,7 +86,7 @@ set_kube_config_values() {
 }
 
 create_target_folder
-create_service_account
+#create_service_account
 get_secret_name_from_service_account
 extract_ca_crt_from_secret
 get_user_token_from_secret

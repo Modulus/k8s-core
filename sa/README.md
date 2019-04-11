@@ -1,4 +1,3 @@
-kubectl create sa ns-admin
-sh role.sh apply ns-admin namespace
-
-sh create_sa.sh ns-admin namespace
+1. kubectl create sa ns-admin
+2. sh role.sh apply ns-admin namespace
+3. sh create_sa.sh ns-admin namespace

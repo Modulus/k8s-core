@@ -97,6 +97,7 @@ Master:
     - blueocean:1.9.0
     - artifactory:2.16.2
     - bitbucket:1.1.8
+
   # Used to approve a list of groovy functions in pipelines used the script-security plugin. Can be viewed under /scriptApproval
   # ScriptApproval:
   #   - "method groovy.json.JsonSlurperClassic parseText java.lang.String"

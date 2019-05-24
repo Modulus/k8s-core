@@ -1,0 +1,38 @@
+# kubectl create secret generic config --from-file=/tmp/kube/k8s-developer-demo.conf
+# kubectl explain deployment.spec.template.spec.volumes.secret.items
+# kubectl explain deployment.spec.template.spec.containers.volumeMounts
+# TODO: Switch to deployment pod from github
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+spec:
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      volumes:
+      - name: kubeconfig
+        secret:
+          secretName: config
+          items:
+            - key: k8s-developer-demo.conf
+              path: config
+      containers:
+      - name: demo
+        image: jenkins/jenkins:lts
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - mountPath: /var/jenkins_home
+            name: kubeconfig
+            readOnly: true
+

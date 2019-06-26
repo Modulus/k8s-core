@@ -155,7 +155,7 @@ master:
 
   # List of plugins to be install during Jenkins master start
   installPlugins:
-    - kubernetes:1.16.0
+    - kubernetes:1.16.1
     - workflow-job:2.32
     - workflow-aggregator:2.6
     - credentials-binding:1.19
@@ -195,34 +195,14 @@ master:
   # etc.  Best reference is https://<jenkins_url>/configuration-as-code/reference.  The example below creates a welcome message:
   JCasC:
     enabled: true
-    pluginVersion: 1.19
+    pluginVersion: 1.21
     # it's only used when plugin version is <=1.18 for later version the
     # configuration as code support plugin is no longer needed
-    supportPluginVersion: 1.19
+    supportPluginVersion: 1.21
     configScripts:
       welcome-message: |
         jenkins:
           systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'.
-          unclassified:
-            artifactorybuilder:
-            useCredentialsPlugin: true
-            artifactoryServers:
-              - serverId: artifactory
-                artifactoryUrl: http://acme.com/artifactory
-                deployerCredentialsConfig:
-                  credentialsId: "artifactory"
-                resolverCredentialsConfig:
-                  username: jenkins
-                  password: snadder
-          credentials:
-            system:
-              domainCredentials:
-                credentials:
-                  - usernamePassword:
-                      scope: SYSTEM
-                      id: sudo_password
-                      username: root
-                      password: "aida" #${SUDO_PASSWORD}
           securityRealm:
             local:
               allowsSignup: false
@@ -230,6 +210,33 @@ master:
                 - id: "tv2i"
                   password: "somethingsecret"
           authorizationStrategy: loggedInUsersCanDoAnything
+        unclassified:
+          artifactorybuilder:
+            useCredentialsPlugin: true
+            artifactoryServers:
+              - serverId: "artifactory"
+                artifactoryUrl: http://acme.com/artifactory
+                deployerCredentialsConfig:
+                  credentialsId: "artifactory"
+                resolverCredentialsConfig:
+                  username: artifactory_user
+                  password: jaddaneida
+        credentials:
+          system:
+              domainCredentials:
+                - domain:
+                    name: "test.com"
+                    description: "test.com domain"
+                    specifications:
+                      - hostnameSpecification:
+                          includes: "*.test.com"
+                  credentials:
+                    - usernamePassword:
+                        scope: SYSTEM
+                        id: sudo_password
+                        username: root
+                        password: neida
+
 
   # Optionally specify additional init-containers
   customInitContainers: []

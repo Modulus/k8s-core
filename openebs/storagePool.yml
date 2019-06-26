@@ -4,4 +4,4 @@ metadata:
   name: gpdpool            
   type: hostdir
 spec:
-  path: "/mnt/openebs-gpd"   
+  path: "/data/openebs-gpd"   

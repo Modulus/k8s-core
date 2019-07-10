@@ -1,16 +1,23 @@
 ## nginx configuration
 ## Ref: https://github.com/kubernetes/ingress/blob/master/controllers/nginx/configuration.md
-##
+## Working example using an elb in from, ssl terminates after elb
 controller:
   name: controller
   image:
     repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-    tag: "0.21.0"
+    tag: "0.24.1"
     pullPolicy: IfNotPresent
     # www-data -> uid 33
     runAsUser: 33
 
-  config: {}
+  # Configures the ports the nginx-controller listens on
+  containerPort:
+    http: 80
+    https: 443
+  # Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+  config: 
+    ssl-redirect: "false"
+    use-forwarded-headers: "true"
   # Will add custom header to Nginx https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers
   headers: {}
 
@@ -24,6 +31,10 @@ controller:
   # to keep resolving names inside the k8s network, use ClusterFirstWithHostNet.
   dnsPolicy: ClusterFirst
 
+  # Bare-metal considerations via the host network https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network
+  # Ingress status was blank because there is no Service exposing the NGINX Ingress controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply
+  reportNodeInternalIp: false
+
   ## Use host ports 80 and 443
   daemonset:
     useHostPort: false
@@ -31,6 +42,8 @@ controller:
     hostPorts:
       http: 80
       https: 443
+      ## healthz endpoint
+      stats: 18080
 
   ## Required only if defaultBackend.enabled = false
   ## Must be <namespace>/<service_name>
@@ -48,6 +61,12 @@ controller:
   # labels to add to the pod container metadata
   podLabels: {}
   #  key: value
+
+  ## Security Context policies for controller pods
+  ## See https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/ for
+  ## notes on enabling and using sysctls
+  ##
+  podSecurityContext: {}
 
   ## Allows customization of the external service
   ## the ingress will be bound to via DNS
@@ -137,13 +156,13 @@ controller:
 
   minAvailable: 1
 
-  resources: {}
-  #  limits:
-  #    cpu: 100m
-  #    memory: 64Mi
-  #  requests:
-  #    cpu: 100m
-  #    memory: 64Mi
+  resources: 
+   limits:
+     cpu: 1024m
+     memory: 4096Mi
+   requests:
+     cpu: 100m
+     memory: 64Mi
 
   autoscaling:
     enabled: false
@@ -159,13 +178,13 @@ controller:
 
   service:
     annotations: 
-      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
-      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
-      service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:enter:the:ssl:arn:here:please
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-north-1:3243fewqf32awf:certificate/xxxxxx"
+      service.beta.kubernetes.io/aws-load-balancer-extra-security-groups: "sg-xxxxx,sg-xxxxx,sg-xxxx"
       service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
     labels: {}
+    omitClusterIP: false
     clusterIP: ""
 
     ## List of IP addresses at which the controller services are available
@@ -187,7 +206,7 @@ controller:
     healthCheckNodePort: 0
 
     targetPorts:
-      http: 80
+      http: http
       https: http
 
     type: LoadBalancer
@@ -196,9 +215,13 @@ controller:
     # nodePorts:
     #   http: 32080
     #   https: 32443
-    nodePorts:
-      http: ""
-      https: ""
+    #   tcp:
+    #     8080: 32808
+    # nodePorts:
+    #   http: ""
+    #   https: ""
+    #   tcp: {}
+    #   udp: {}
 
   extraContainers: []
   ## Additional containers to be added to the controller pod.
@@ -246,6 +269,7 @@ controller:
 
     service:
       annotations: {}
+      omitClusterIP: false
       clusterIP: ""
 
       ## List of IP addresses at which the stats service is available
@@ -258,8 +282,7 @@ controller:
       servicePort: 18080
       type: ClusterIP
 
-  ## If controller.stats.enabled = true and controller.metrics.enabled = true, Prometheus metrics will be exported
-  ##
+
   metrics:
     enabled: false
 
@@ -268,6 +291,7 @@ controller:
       # prometheus.io/scrape: "true"
       # prometheus.io/port: "10254"
 
+      omitClusterIP: false
       clusterIP: ""
 
       ## List of IP addresses at which the stats-exporter service is available
@@ -283,6 +307,8 @@ controller:
     serviceMonitor:
       enabled: false
       additionalLabels: {}
+      namespace: ""
+      # honorLabels: true
 
   lifecycle: {}
 
@@ -302,9 +328,11 @@ defaultBackend:
 
   name: default-backend
   image:
-    repository: k8s.gcr.io/defaultbackend
-    tag: "1.4"
+    repository: k8s.gcr.io/defaultbackend-amd64
+    tag: "1.5"
     pullPolicy: IfNotPresent
+    # nobody user -> uid 65534
+    runAsUser: 65534
 
   extraArgs: {}
 
@@ -320,6 +348,12 @@ defaultBackend:
   #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
 
   affinity: {}
+
+  ## Security Context policies for controller pods
+  ## See https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/ for
+  ## notes on enabling and using sysctls
+  ##
+  podSecurityContext: {}
 
   # labels to add to the pod container metadata
   podLabels: {}
@@ -347,7 +381,10 @@ defaultBackend:
   #   memory: 20Mi
 
   service:
-    annotations: {}
+    annotations: 
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-north-1:32e3243423:certificate/xxxxxxxxxxxxx"
+      service.beta.kubernetes.io/aws-load-balancer-extra-security-groups: "sg-xxx,sg-xx,sg-xxxx" 
+    omitClusterIP: false
     clusterIP: ""
 
     ## List of IP addresses at which the default backend service is available

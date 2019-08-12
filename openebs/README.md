@@ -1,6 +1,1 @@
-helm install -n storage --namespace openebs-system stable/openebs
-
-
-# Set default storage class
-
-kubectl pathc storageclass openebs-jiva-gpd-3repl -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+helm install --namespace openebs --name openebs stable/openebs --version 1.1.0 -f values.yml

@@ -19,11 +19,11 @@ existingConfigMap: metallb-config
 # available options.
 configInline:
     # Example ARP Configuration
-    # address-pools:
-    # - name: default
-    #  protocol: layer2
-    #  addresses:
-    #  - 192.168.1.240-192.168.1.250
+  address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 192.168.1.230-192.168.1.250
     #
     # Example BGP Configuration
     # peers:

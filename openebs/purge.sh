@@ -1,3 +1,5 @@
+echo "https://docs.openebs.io/docs/next/uninstall.html"
+
 kubectl delete crd castemplates.openebs.io
 kubectl delete crd cstorpools.openebs.io
 kubectl delete crd cstorvolumereplicas.openebs.io

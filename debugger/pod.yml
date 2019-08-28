@@ -2,21 +2,15 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: debugger
-  labels:
-    app: debugger
-    role: debug
 spec:
   containers:
-    - name: debugger
-      image: coderpews/debugger:1.0.1
-      args:
-        - /bin/sh
-        - -c
-        - touch /tmp/healthy
-      livenessProbe:
-        exec:
-          command:
-            - cat
-            - /tmp/healthy
-        initialDelaySeconds: 5
-        periodSeconds: 5
+  - name: debugger
+    image: coderpews/debugger:1.0.3
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+      requests:
+        memory: "56Mi"
+        cpu: "128m"
+    command: ["tail", "-f", "/dev/null"]

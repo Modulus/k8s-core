@@ -1,17 +1,63 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
-provisioner: openebs.io/provisioner-iscsi
 metadata:
-  name: openebs-jiva-gpd-3repl
+  name: openebs-cstor-pool-sparse-2-replicas
+  labels:
+    replicas: "2"
+    type: "cstor"
+    storage: "sparse"
   annotations:
+    openebs.io/cas-type: cstor
     cas.openebs.io/config: |
-      - name: ControllerImage
-        value: openebs/jiva:0.8.2
-      - name: ReplicaImage
-        value: openebs/jiva:0.8.2
-      - name: VolumeMonitorImage
-        value: openebs/m-exporter:0.8.2
+      - name: StoragePoolClaim
+        value: "openebs-cstor-pool-sparse"
       - name: ReplicaCount
         value: "2"
-      - name: StoragePool
-        value: gpdpool
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-cstor-pool-sparse-1-replicas
+  labels:
+    replicas: "1"
+    type: "cstor"
+    storage: "sparse"
+  annotations:
+    openebs.io/cas-type: cstor
+    cas.openebs.io/config: |
+      - name: StoragePoolClaim
+        value: "openebs-cstor-pool-sparse"
+      - name: ReplicaCount
+        value: "1"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-cstor-pool-fast-2-replicas
+  labels:
+    replicas: "2"
+    type: "cstor"
+    storage: "fast"
+  annotations:
+    openebs.io/cas-type: cstor
+    cas.openebs.io/config: |
+      - name: StoragePoolClaim
+        value: "openebs-cstor-pool-fast"
+      - name: ReplicaCount
+        value: "2"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-cstor-pool-fast-1-replicas
+  labels:
+    replicas: "1"
+    type: "cstor"
+    storage: "fast"
+  annotations:
+    openebs.io/cas-type: cstor
+    cas.openebs.io/config: |
+      - name: StoragePoolClaim
+        value: "openebs-cstor-pool-fast"
+      - name: ReplicaCount
+        value: "1"

@@ -34,7 +34,7 @@ apiVersion: v1
 metadata:
   name: demo-vol1-claim
 spec:
-  storageClassName: openebs-jiva-gpd-3repl
+  storageClassName: openebs-cstor-pool-fast-2-replicas
   accessModes:
     - ReadWriteOnce
   resources:

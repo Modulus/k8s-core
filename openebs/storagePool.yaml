@@ -1,0 +1,45 @@
+---
+apiVersion: openebs.io/v1alpha1
+kind: StoragePoolClaim
+metadata:
+  name: openebs-cstor-pool-fast
+  annotations:
+    cas.openebs.io/config: |
+      - name: PoolResourceRequests
+        value: |-
+            memory: 2Gi
+      - name: PoolResourceLimits
+        value: |-
+            memory: 4Gi
+spec:
+  name: openebs-cstor-pool-fast
+  type: disk
+  poolSpec:
+    poolType: mirroed
+  blockDevices:
+    blockDeviceList:
+    - blockdevice-37969df33b84df671ca6ce3a7f5585d5 
+    - blockdevice-f3772a7720afd6cdee6f9a158f49e4d7
+---
+apiVersion: openebs.io/v1alpha1
+kind: StoragePoolClaim
+metadata:
+  name: openebs-cstor-pool-sparse
+  annotations:
+    cas.openebs.io/config: |
+      - name: PoolResourceRequests
+        value: |-
+            memory: 2Gi
+      - name: PoolResourceLimits
+        value: |-
+            memory: 4Gi
+spec:
+  name: openebs-cstor-pool-sparse
+  type: disk
+  poolSpec:
+    poolType: mirrored
+  blockDevices:
+    blockDeviceList:
+      - sparse-102c8bcdfc73c5ce626ca625acb4d1c8
+      - sparse-2a32194ddd98e8ae77eb1677a59a1ce7
+---

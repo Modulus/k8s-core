@@ -87,7 +87,7 @@ ndm:
   filters:
     excludeVendors: "CLOUDBYT,OpenEBS"
     includePaths: "/dev/sda,sda,/dev/sdb,sdb"
-    excludePaths: "loop,fd0,sr0,/dev/ram,/dev/dm-,/dev/md,/dev/nvme0n1"
+    excludePaths: "loop,fd0,sr0,/dev/ram,/dev/dm-,/dev/md"
   probes:
     enableSeachest: false
   nodeSelector: {}
@@ -113,6 +113,7 @@ webhook:
   image: "quay.io/openebs/admission-server"
   imageTag: "1.1.0"
   generateTLS: true
+  failurePolicy: Ignore
   replicas: 1
   nodeSelector: {}
   tolerations: []
@@ -121,7 +122,7 @@ webhook:
 jiva:
   image: "quay.io/openebs/jiva"
   imageTag: "1.1.0"
-  replicas: 2
+  replicas: 3
 
 cstor:
   pool:

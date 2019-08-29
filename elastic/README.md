@@ -1,5 +1,12 @@
 # Install elasticsearch
-helm install -n elasticsearch --namespace demo -f values.cloud.yml incubator/elasticsearch
 
-# install kibana
-helm install -n kibana --namespace -f kibana.values.cloud.yml demo stable/kibana
+helm repo add elastic https://helm.elastic.co
+
+helm install --namespace monitoring-f values.es.yaml --name elasticsearch elastic/elasticsearch
+
+helm install --namespace monitoring -f values.es.yaml --name elasticsearch elastic/elasticsearch --set imageTag=7.3.0
+
+# Install kibana
+helm repo add elastic https://helm.elastic.co
+
+helm install -f values.ki.yaml --namespace monitoring --name kibana elastic/kibana

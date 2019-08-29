@@ -15,7 +15,7 @@ spec:
   name: cstor-block-pool
   type: disk
   poolSpec:
-    poolType: mirror
+    poolType: mirrored
   blockDevices:
     blockDeviceList:
       - blockdevice-37969df33b84df671ca6ce3a7f5585d5
@@ -37,7 +37,7 @@ spec:
   name: cstor-sparse-pool
   type: disk
   poolSpec:
-    poolType: mirror
+    poolType: mirrored
   blockDevices:
     blockDeviceList:
       - sparse-102c8bcdfc73c5ce626ca625acb4d1c8

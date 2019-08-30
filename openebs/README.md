@@ -13,3 +13,5 @@ kubectl apply -f storageClass.yaml
 https://docs.openebs.io/docs/next/uninstall.html
 
 ahd "sh purge.sh"
+
+    includePaths: "/dev/sda,sda,/dev/sdb,sdb"

@@ -82,12 +82,13 @@ networkHost: "0.0.0.0"
 
 volumeClaimTemplate:
   accessModes: [ "ReadWriteOnce" ]
+  storageClassName: openebs-cstor-pool-fast-1-replicas
   resources:
     requests:
       storage: 30Gi
 
 persistence:
-  enabled: false
+  enabled: true
   annotations: {}
 
 extraVolumes: ""

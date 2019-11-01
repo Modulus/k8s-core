@@ -261,7 +261,7 @@ master:
                     serverUrl("https://bitbucket.org")
                     repoOwner("owner")
                     credentialsId("bitbucket")
-                    //autoRegisterHook(true)
+                    //autoRegisterHooks(true)
   
                     // "Traits" ("Behaviours" in the GUI) that are "declarative-compatible"
                     traits {

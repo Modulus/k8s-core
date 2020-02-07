@@ -1,0 +1,23 @@
+repositories:
+# To use official "stable" charts a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+# To use official "incubator" charts a.k.a https://github.com/helm/charts/tree/master/incubator
+- name: incubator
+  url: https://kubernetes-charts-incubator.storage.googleapis.com
+# helm-git powered repository: You can treat any Git repository as a charts repository
+# - name: nginx-stable 
+#   url: https://helm.nginx.com/stable
+
+# - name: loki
+#   url: https://grafana.github.io/loki/charts
+
+
+releases:
+  - name: metrics-server
+    chart: stable/metrics-server
+    version: 2.9.0
+    namespace: kube-system
+    values:
+      - image:
+          tag: v0.3.2

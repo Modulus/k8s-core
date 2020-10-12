@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit-ranges-cpu-mem
+spec:
+  limits:
+  - type: PersistentVolumeClaim
+    min:
+      storage: 512Mi
+    max:
+      storage: 50Gi
+  - default:
+      cpu: 1000m
+      memory: 500Mi
+    defaultRequest:
+      cpu: 250m
+      memory: 250Mi
+    min:
+      cpu: 50m
+      memory: 250Mi
+    max:
+      cpu: 4000m
+      memory: 3890Mi      
+    type: Container
